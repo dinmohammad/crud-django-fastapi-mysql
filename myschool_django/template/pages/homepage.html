@@ -1,0 +1,29 @@
+{% extends "../layouts/base.html" %}
+
+{% block content %}
+    <section class="all-student-card my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="top-wrapper my-3 d-flex gap-3">
+                        <a href="/new-student/" class="btn btn-primary">Add Student</a>
+                    </div>
+                </div>
+                {% for item in response%}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">{{ item.stdCls }}</h6>
+                        <p class="card-text">{{ item.details }}</p>
+                        <a href="/student-details/{{ item.id }}" class="card-link btn btn-success">More Details</a>
+                          <a href="/delete-student/{{ item.id }}" class="card-link btn btn-danger">Delete</a>
+                          <a href="/edit-student/{{ item.id }}" class="card-link btn btn-info">Edit</a>
+                      </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

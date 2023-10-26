@@ -1,0 +1,35 @@
+{% extends "../layouts/base.html" %}
+
+{% block content %}
+    <section class="edit-student-card my-5">
+        <div class="container">
+            <div class="row">
+                 <div class="col-md-12">
+                    <div class="top-wrapper my-3 d-flex gap-3">
+                        <h3>Update Student information</h3>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                   <form method="post" action="{% url 'update-student' std_id=data.id %}" > {% csrf_token %}
+                       <div class="mb-3">
+                          <label for="std-name" class="form-label">Full Name</label>
+                          <input type="text" class="form-control" name="std-name" id="std-name" value="{{ data.name }}" placeholder="Typeing....">
+                       </div>
+                       <div class="mb-3">
+                          <label for="std-class" class="form-label">Class Name</label>
+                          <input type="text" class="form-control" name="std-class" id="std-class" value="{{ data.stdCls }}" placeholder="Typeing....">
+                       </div>
+                       <div class="mb-3">
+                          <label for="std-details" class="form-label">Student Details</label>
+                          <input type="text" class="form-control" name="std-details" id="std-details" value="{{ data.details  }}" placeholder="Typeing....">
+                       </div>
+                       <div class="mb-3">
+                        <button type="submit" class="btn btn-primary mb-3">Update</button>
+                      </div>
+
+                   </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
