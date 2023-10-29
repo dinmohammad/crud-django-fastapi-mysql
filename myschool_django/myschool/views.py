@@ -35,15 +35,17 @@ def createStudent(request):
         std_name = request.POST['std-name']
         std_class = request.POST['std-class']
         std_details = request.POST['std-details']
+        std_img = request.POST['std_img']
 
         data = {
             "name": std_name,
             "stdCls": std_class,
             "details": std_details,
+            "imageUrl": std_img,
             "user_id": 5
         }
 
-        api_url = f'{settings.BASE_URL}/create_post/'
+        api_url = f'{settings.BASE_URL}/create_student/'
         response = requests.post(api_url, json=data)
 
         if response.status_code == 201:

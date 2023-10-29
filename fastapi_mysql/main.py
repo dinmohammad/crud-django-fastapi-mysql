@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+import os
+from fastapi import FastAPI, File, HTTPException, Depends, Request, UploadFile, status
 from pydantic import BaseModel
 from typing import Annotated, Optional
 import models
@@ -22,6 +23,7 @@ class studentBase(BaseModel):
     name: str
     stdCls: str
     details: str
+    imageUrl: str
     user_id: int
 
 class UpdateStudentBase(BaseModel):
@@ -40,12 +42,39 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
+IMAGEDIR = "uploads/"
+
+@app.post("/image_upload/")
+async def image_post(request: Request, file: UploadFile = File(...)):
+    contents = await file.read()
+
+    with open(f"{IMAGEDIR}{file.filename}", "wb") as f:
+        f.write(contents)
+    print(file.filename)
+    return {"Result": "OK"}
+   
+
 
 @app.post("/create_post/", status_code=status.HTTP_201_CREATED)
-async def create_post(std: studentBase, db: db_dependency):
-    db_post = models.student(**std.model_dump())
-    db.add(db_post)
-    db.commit()
+async def create_post(std: studentBase, db: db_dependency, file: UploadFile = File(...)):
+    print("hjello0 ajsdlkf")
+    try:
+        contents = await file.read()
+
+        with open(os.path.join(IMAGEDIR, file.filename), "wb") as f:
+            f.write(contents)
+
+        std.imageUrl = file.filename
+        print(std.imageUrl)
+
+        db_post = models.Student(**std.model_dump()) 
+        db.add(db_post)
+        db.commit()
+        db.refresh(db_post)
+
+        return {"Result": "OK"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @app.get("/get_student/{std_id}", status_code=status.HTTP_200_OK)

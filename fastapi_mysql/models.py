@@ -22,10 +22,11 @@ class Post(Base):
     
 
 class student(Base):
-    __tablename__ = "student"
+    __tablename__ = "student_table"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50))
     stdCls = Column(String(100))
     details = Column(String(100))
+    imageUrl = Column(String(500))
     user_id = Column(Integer)
