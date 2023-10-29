@@ -57,13 +57,13 @@ async def image_post(request: Request, file: UploadFile = File(...)):
    
 
 
-@app.post("/create_post/", status_code=status.HTTP_201_CREATED)
+@app.post("/create_student/", status_code=status.HTTP_201_CREATED)
 async def create_post(
     db: db_dependency,
-    name = str, 
-    stdCls = str, 
-    details = str, 
-    user_id = int, 
+    name: str = Form(...), 
+    stdCls: str = Form(...), 
+    details: str = Form(...), 
+    user_id: int = Form(...), 
     file: UploadFile = File(...)):
        
     contents = await file.read()

@@ -1,4 +1,6 @@
-from django.http import HttpResponse
+import json
+
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 import requests
 
@@ -35,25 +37,29 @@ def createStudent(request):
         std_name = request.POST['std-name']
         std_class = request.POST['std-class']
         std_details = request.POST['std-details']
-        std_img = request.POST['std_img']
+        std_img = request.FILES.get('std_img')
 
         data = {
-            "name": std_name,
-            "stdCls": std_class,
-            "details": std_details,
-            "imageUrl": std_img,
-            "user_id": 5
+            "name": f'{std_name}',
+            "stdCls": f'{std_class}',
+            "details": f'{std_details}',
+            "imageUrl": f'{std_img.name}',
+            "user_id": 5,
         }
+        data1 = json.dumps(data)
+
+        print(data1)
 
         api_url = f'{settings.BASE_URL}/create_student/'
-        response = requests.post(api_url, json=data)
+        response = requests.post(api_url, data)
 
         if response.status_code == 201:
-            return redirect('/')
+            return JsonResponse({"message": "Student created successfully"})
         else:
-            return HttpResponse("Failed to add student", status=500)
+            print("Failed status code:", response.status_code)
+            return JsonResponse({"message": "Failed to create a student record. Please try again"}, status=500)
 
-    # return render(request, 'pages/homepage.html')
+    return render(request, 'pages/homepage.html')
 
 
 def deleteStudent(request, std_id):
