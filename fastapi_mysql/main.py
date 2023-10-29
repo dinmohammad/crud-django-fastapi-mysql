@@ -65,26 +65,22 @@ async def create_post(
     details = str, 
     user_id = int, 
     file: UploadFile = File(...)):
-    try:
-        contents = await file.read()
-        with open(os.path.join(IMAGEDIR, file.filename), "wb") as f:
-            f.write(contents)
-        
-        db_post = models.student(
-            name=name,
-            stdCls=stdCls,
-            details=details,
-            imageUrl=file.filename, 
-            user_id=user_id
-        )   
-        db.add(db_post)
-        db.commit()
-        db.refresh(db_post)
-        return {"Result": "OK"}
-    except FileNotFoundError as e:
-        return JSONResponse(content={"error": "File not found"}, status_code=404)
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
+       
+    contents = await file.read()
+    with open(os.path.join(IMAGEDIR, file.filename), "wb") as f:
+        f.write(contents)
+    
+    db_post = models.student(
+        name=name,
+        stdCls=stdCls,
+        details=details,
+        imageUrl=file.filename, 
+        user_id=user_id
+    )   
+    db.add(db_post)
+    db.commit()
+    db.refresh(db_post)
+    return {"Result": "OK"}
     
 
 
