@@ -1,3 +1,4 @@
+from datetime import date
 import os
 from fastapi import FastAPI, File, HTTPException, Depends, Request, UploadFile, status,Form
 from fastapi.responses import JSONResponse
@@ -73,14 +74,18 @@ async def create_post(
     details: str = Form(...), 
     file: UploadFile = File(...),
     user_id: int = Form(...)):
+
+    currentDate = date.today()
+   
        
     contents = await file.read()
-    with open(os.path.join(IMAGEDIR, file.filename), "wb") as f:
+    localImagePath = f'{currentDate}' + f'{file.filename}'
+  
+    with open(os.path.join(IMAGEDIR, localImagePath), "wb") as f:
         f.write(contents)
 
   
-    
-    Image_path = IMAGEDIR + IMAGEDIR + file.filename
+    Image_path = BASE_URL + IMAGEDIR + f'{currentDate}' + file.filename 
     
     db_post = models.student(
         name=name,
