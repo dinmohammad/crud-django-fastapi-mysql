@@ -17,9 +17,12 @@
                         <h5 class="card-title">{{ item.name }}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">{{ item.stdCls }}</h6>
                         <p class="card-text">{{ item.details }}</p>
+                          <div class="d-flex gap-3">
+
+                          </div>
                         <a href="/student-details/{{ item.id }}" class="card-link btn btn-success">More Details</a>
-                          <a href="/delete-student/{{ item.id }}" class="card-link btn btn-danger">Delete</a>
-                          <a href="/edit-student/{{ item.id }}" class="card-link btn btn-info">Edit</a>
+                        <a href="/delete-student/{{ item.id }}" class="card-link btn btn-danger">Delete</a>
+                        <a href="/edit-student/{{ item.id }}" class="card-link btn btn-info">Edit</a>
                       </div>
                     </div>
                 </div>

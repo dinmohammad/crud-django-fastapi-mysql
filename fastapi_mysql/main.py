@@ -1,6 +1,7 @@
 import os
 from fastapi import FastAPI, File, HTTPException, Depends, Request, UploadFile, status,Form
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Annotated, Optional
 import models
@@ -15,6 +16,9 @@ models.Base.metadata.create_all(bind=engine)
 
 BASE_URL = 'http://127.0.0.1:8000/' # port 8001
 IMAGEDIR = "uploads/"
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 
 class UserBase(BaseModel):
     username: str
