@@ -26,7 +26,7 @@ class student(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50))
-    stdCls = Column(String(100))
+    stdcls = Column(String(100))
     details = Column(String(100))
-    imageUrl = Column(String(500))
+    imageUrl = Column(String(1000))
     user_id = Column(Integer)

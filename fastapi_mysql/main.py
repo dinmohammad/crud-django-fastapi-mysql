@@ -61,10 +61,10 @@ async def image_post(request: Request, file: UploadFile = File(...)):
 async def create_post(
     db: db_dependency,
     name: str = Form(...), 
-    stdCls: str = Form(...), 
+    stdcls: str = Form(...), 
     details: str = Form(...), 
-    user_id: int = Form(...), 
-    file: UploadFile = File(...)):
+    file: UploadFile = File(...),
+    user_id: int = Form(...)):
        
     contents = await file.read()
     with open(os.path.join(IMAGEDIR, file.filename), "wb") as f:
@@ -72,7 +72,7 @@ async def create_post(
     
     db_post = models.student(
         name=name,
-        stdCls=stdCls,
+        stdcls=stdcls,
         details=details,
         imageUrl=file.filename, 
         user_id=user_id
@@ -80,7 +80,7 @@ async def create_post(
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
-    return {"Result": "OK"}
+    return {"Result": db_post}
     
 
 

@@ -5,6 +5,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+                    <div class="top-wrapper my-3 d-flex gap-3">
+                        <h3>Create Student information</h3>
+                    </div>
+                 </div>
+                <div class="col-md-12">
                    <form method="post" action="{% url 'create-student'%}" enctype="multipart/form-data">
                        {% csrf_token %}
                        <div class="mb-3">
@@ -19,7 +24,11 @@
                           <label for="std-details" class="form-label">Student Details</label>
                           <input type="text" class="form-control" name="std-details" id="std-details" placeholder="Typeing....">
                        </div>
-                       <input type="file" name="std_img" id="std_img">
+                       <div class="mb-3">
+                          <label for="std-details" class="form-label w-100">Personal Photo</label>
+                          <input type="file" name="std_img" id="std_img">
+                       </div>
+
                        <div class="mb-3">
                         <button type="submit" class="btn btn-primary mb-3">Add</button>
                       </div>

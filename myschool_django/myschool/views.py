@@ -40,21 +40,21 @@ def createStudent(request):
         std_img = request.FILES.get('std_img')
 
         data = {
-            "name": f'{std_name}',
-            "stdCls": f'{std_class}',
-            "details": f'{std_details}',
-            "imageUrl": f'{std_img.name}',
+            "name": std_name,
+            "stdcls": std_class,
+            "details": std_details,
             "user_id": 5,
         }
-        data1 = json.dumps(data)
+        files = {'file': (std_img.name, std_img.read())}
+        # data1 = json.dumps(data)
 
-        print(data1)
+        print(data)
 
         api_url = f'{settings.BASE_URL}/create_student/'
-        response = requests.post(api_url, data)
+        response = requests.post(api_url, data=data, files=files)
 
         if response.status_code == 201:
-            return JsonResponse({"message": "Student created successfully"})
+            return redirect('/')
         else:
             print("Failed status code:", response.status_code)
             return JsonResponse({"message": "Failed to create a student record. Please try again"}, status=500)
