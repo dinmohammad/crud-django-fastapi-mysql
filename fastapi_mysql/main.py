@@ -12,6 +12,10 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 
+
+BASE_URL = 'http://127.0.0.1:8000/' # port 8001
+IMAGEDIR = "uploads/"
+
 class UserBase(BaseModel):
     username: str
 
@@ -44,7 +48,7 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-IMAGEDIR = "uploads/"
+
 
 @app.post("/image_upload/")
 async def image_post(request: Request, file: UploadFile = File(...)):
@@ -69,12 +73,16 @@ async def create_post(
     contents = await file.read()
     with open(os.path.join(IMAGEDIR, file.filename), "wb") as f:
         f.write(contents)
+
+  
+    
+    Image_path = IMAGEDIR + IMAGEDIR + file.filename
     
     db_post = models.student(
         name=name,
         stdcls=stdcls,
         details=details,
-        imageUrl=file.filename, 
+        imageUrl=Image_path, 
         user_id=user_id
     )   
     db.add(db_post)
@@ -102,7 +110,7 @@ async def get_all_posts(db: db_dependency):
 
 @app.get("/all_post_by_user_id/{user_id}", status_code=status.HTTP_201_CREATED)
 async def get_all_posts(user_id: int, db: db_dependency):
-    post_data = db.query(models.student).filter(models.student.user_id == user_id).all()  # // 5 is user id
+    post_data = db.query(models.student).filter(models.student.user_id == user_id).all()  # // default 5 is user id
     if not post_data:
         raise HTTPException(status_code=404, detail='No posts found')
     return post_data

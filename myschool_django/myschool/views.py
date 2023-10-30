@@ -1,3 +1,4 @@
+import base64
 import json
 
 from django.http import HttpResponse, JsonResponse
@@ -6,8 +7,10 @@ import requests
 
 from myschool import settings
 
+base_url = settings.BASE_URL
 
-def homePage(request):
+
+def homePage(request, image_bytes=None):
     api_url = f'{settings.BASE_URL}/all_student/'
     response = requests.get(api_url).json()
     return render(request, 'pages/homepage.html', {'response': response})

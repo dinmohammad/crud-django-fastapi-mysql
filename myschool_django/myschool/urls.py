@@ -3,6 +3,7 @@ from django.urls import path
 
 from myschool import views
 
+
 urlpatterns = [
     path('', views.homePage),
     path('new-student/', views.newStudentPage),
@@ -14,3 +15,6 @@ urlpatterns = [
     path('about-us/', views.aboutPage),
     path('admin/', admin.site.urls),
 ]
+
+
+
