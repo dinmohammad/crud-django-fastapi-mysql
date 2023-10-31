@@ -15,7 +15,7 @@ models.Base.metadata.create_all(bind=engine)
 
 
 
-BASE_URL = 'http://127.0.0.1:8000/' # port 8001
+BASE_URL = 'http://127.0.0.1:8000/' # port 8000
 IMAGEDIR = "uploads/"
 
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
@@ -146,8 +146,18 @@ def update_student(std_id: int, student: UpdateStudentBase, db: db_dependency):
 @app.delete("/delete-post/{post_id}", status_code=status.HTTP_200_OK)
 async def delete_post_by_id(post_id: int, db: db_dependency):
     data = db.query(models.student).filter(models.student.id == post_id).first()
+    
     if data is None:
         raise HTTPException(status_code=404, detail='No posts found')
+    
+    image_url = data.imageUrl
+    filename = os.path.basename(image_url)
+    image_path = os.path.join(IMAGEDIR, filename)
+
+    # Delete the image file from the server if it exists
+    if os.path.exists(image_path):
+        os.remove(image_path)
+
     db.delete(data)
     db.commit()
 
