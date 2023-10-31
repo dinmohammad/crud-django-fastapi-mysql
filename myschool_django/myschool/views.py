@@ -97,13 +97,20 @@ def updateStudent(request, std_id):
 
         data = {
             "name": std_name,
-            "stdCls": std_class,
+            "stdcls": std_class,
             "details": std_details,
-            "user_id": 5
+            "user_id": 5,
         }
 
+        # files = {}
+
+        if 'std_img' in request.FILES:
+            std_img = request.FILES['std_img']
+            # files['file'] = (std_img.name, std_img.read())
+            files = {'file': (std_img.name, std_img.read())}
+
         api_url = f'{settings.BASE_URL}/update-student/{std_id}'
-        response = requests.put(api_url, json=data)
+        response = requests.put(api_url, data=data, files=files)
 
         if response.status_code == 200:
             return redirect('/')

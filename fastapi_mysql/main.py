@@ -124,18 +124,38 @@ async def get_all_posts(user_id: int, db: db_dependency):
         raise HTTPException(status_code=404, detail='No posts found')
     return post_data
 
-@app.put("/update-student/{std_id}", status_code=status.HTTP_200_OK)
-def update_student(std_id: int, student: UpdateStudentBase, db: db_dependency):
+@app.put("/update-student/{std_id}", status_code=status.HTTP_201_CREATED)
+async def update_student(
+    db: db_dependency,
+    std_id: int, 
+    name: str = Form(...), 
+    stdcls: str = Form(...), 
+    details: str = Form(...), 
+    file: UploadFile = File(...),
+    user_id: int = Form(...)
+):
     student_db = db.query(models.student).filter(models.student.id == std_id).first()
     if student_db is None:
         raise HTTPException(status_code=404, detail="Student not found")
+    
+    if name is not None:
+        student_db.name = name
+    if stdcls is not None:
+        student_db.stdcls = stdcls
+    if details is not None:
+        student_db.details = details
+    if file is not None:
+        currentDate = date.today()
+        contents = await file.read()
+        localImagePath = f'{currentDate}' + f'{file.filename}'
+    
+        with open(os.path.join(IMAGEDIR, localImagePath), "wb") as f:
+            f.write(contents)
 
-    if student.name is not None:
-        student_db.name = student.name
-    if student.stdCls is not None:
-        student_db.stdCls = student.stdCls
-    if student.details is not None:
-        student_db.details = student.details
+        Image_path = BASE_URL + IMAGEDIR + f'{currentDate}' + file.filename 
+        student_db.imageUrl = Image_path
+    if user_id is not None:
+        student_db.user_id = user_id
 
     db.commit()
     db.refresh(student_db)

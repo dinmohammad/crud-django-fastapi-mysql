@@ -10,21 +10,22 @@
                     </div>
                  </div>
                 <div class="col-md-12">
-                   <form method="post" action="{% url 'update-student' std_id=data.id %}" > {% csrf_token %}
+                   <form method="post" action="{% url 'update-student' std_id=data.id %}" enctype="multipart/form-data">
+                       {% csrf_token %}
                        <div class="mb-3">
                           <label for="std-name" class="form-label">Full Name</label>
                           <input type="text" class="form-control" name="std-name" id="std-name" value="{{ data.name }}" placeholder="Typeing....">
                        </div>
                        <div class="mb-3">
                           <label for="std-class" class="form-label">Class Name</label>
-                          <input type="text" class="form-control" name="std-class" id="std-class" value="{{ data.stdCls }}" placeholder="Typeing....">
+                          <input type="text" class="form-control" name="std-class" id="std-class" value="{{ data.stdcls }}" placeholder="Typeing....">
                        </div>
                        <div class="mb-3">
                           <label for="std-details" class="form-label">Student Details</label>
                           <input type="text" class="form-control" name="std-details" id="std-details" value="{{ data.details  }}" placeholder="Typeing....">
                        </div>
                        <div class="mb-3">
-                          <label for="std-details" class="form-label w-100">Personal Photo</label>
+                          <label for="std_img" class="form-label w-100">Personal Photo</label>
                           <input type="file" name="std_img" id="std_img">
                            
                            <div class="image-wrapper mt-4">
