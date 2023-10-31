@@ -5,12 +5,20 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+                    <div class="top-wrapper my-3 d-flex gap-3">
+                        <h3>Student information</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src="{{ data.imageUrl }}" height="auto" width="100%">
+                </div>
+                <div class="col-md-8">
                     <ul class="list-group">
-                      <li class="list-group-item">
+                        <li class="list-group-item">
                           <h1>{{ data.name }}</h1>
-                      </li>
-                      <li class="list-group-item">{{ data.stdCls }}</li>
-                      <li class="list-group-item">{{ data.details }}</li>
+                        </li>
+                        <li class="list-group-item">{{ data.stdcls }}</li>
+                        <li class="list-group-item">{{ data.details }}</li>
                     </ul>
                 </div>
             </div>
