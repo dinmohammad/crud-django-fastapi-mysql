@@ -102,7 +102,7 @@ def updateStudent(request, std_id):
             "user_id": 5,
         }
 
-        # files = {}
+        files = {}
 
         if 'std_img' in request.FILES:
             std_img = request.FILES['std_img']
@@ -112,9 +112,10 @@ def updateStudent(request, std_id):
         api_url = f'{settings.BASE_URL}/update-student/{std_id}'
         response = requests.put(api_url, data=data, files=files)
 
-        if response.status_code == 200:
+        if response.status_code == 201:  # 201 Created
             return redirect('/')
         else:
+            print(f"FastAPI Response: {response.status_code}, {response.content}")
             return HttpResponse("Failed to edit student", status=500)
 
 
