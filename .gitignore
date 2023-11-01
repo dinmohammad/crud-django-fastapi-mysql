@@ -1,0 +1,6 @@
+/fastapi_mysql/.idea
+/fastapi_mysql/venv
+/fastapi_mysql/__pycache__
+/myschool_django/.idea
+/myschool_django/venv
+/myschool_django/myschool/__pycache__/
