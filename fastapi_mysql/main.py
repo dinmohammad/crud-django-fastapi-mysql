@@ -1,11 +1,12 @@
 from datetime import date
+import imghdr
 import os
 from fastapi import FastAPI, File, HTTPException, Depends, Request, UploadFile, status,Form
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Annotated, Optional
-from core.helper import insert_image
+from core.helper import insert_image, validete_image_formate
 import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
@@ -75,6 +76,11 @@ async def create_post(
     details: str = Form(...), 
     file: UploadFile = File(...),
     user_id: int = Form(...)):
+
+    # await validete_image_formate(file)
+    # image_format = imghdr.what(None, h=file.file.read())
+    # if image_format not in ["jpeg", "jpg", "png"]:
+    #     raise HTTPException(status_code=400, detail="Invalid image format. Supported formats are JPEG and PNG.")
 
     Image_path = await insert_image(file, IMAGEDIR, BASE_URL) # helper.inser_image function use 
 
