@@ -1,3 +1,4 @@
+from datetime import date
 import os
 from fastapi import FastAPI, File, HTTPException, Depends, Request, UploadFile, status,Form
 from fastapi.responses import JSONResponse
@@ -135,14 +136,7 @@ async def update_student(
     if details is not None:
         student_db.details = details
     if file is not None:
-        currentDate = date.today()
-        contents = await file.read()
-        localImagePath = f'{currentDate}' + f'{file.filename}'
-    
-        with open(os.path.join(IMAGEDIR, localImagePath), "wb") as f:
-            f.write(contents)
-
-        Image_path = BASE_URL + IMAGEDIR + f'{currentDate}' + file.filename 
+        Image_path = await insert_image(file, IMAGEDIR, BASE_URL) # user helper.insert_image functon
         student_db.imageUrl = Image_path
     if user_id is not None:
         student_db.user_id = user_id
@@ -186,3 +180,5 @@ async def read_user(user_id: int, db: db_dependency):
     if user is None:
         raise HTTPException(status_code=404, detail='user not found')
     return user
+
+
