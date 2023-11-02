@@ -1,10 +1,10 @@
-from datetime import date, datetime
 import os
 from fastapi import FastAPI, File, HTTPException, Depends, Request, UploadFile, status,Form
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Annotated, Optional
+from core.helper import insert_image
 import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
@@ -75,18 +75,8 @@ async def create_post(
     file: UploadFile = File(...),
     user_id: int = Form(...)):
 
-    currentDate = datetime.today()
-    formatted_date = currentDate.strftime("%Y-%m-%d_%H-%M-%S-%f_")
+    Image_path = await insert_image(file, IMAGEDIR, BASE_URL) # helper.inser_image function use 
 
-    contents = await file.read()
-    localImagePath = f'{currentDate}' + f'{file.filename}'
-  
-    with open(os.path.join(IMAGEDIR, localImagePath), "wb") as f:
-        f.write(contents)
-
-  
-    Image_path = BASE_URL + IMAGEDIR + f'{formatted_date}' + file.filename 
-    
     db_post = models.student(
         name=name,
         stdcls=stdcls,
