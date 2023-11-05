@@ -78,13 +78,7 @@ async def create_post(
     file: UploadFile = File(...),
     user_id: int = Form(...)):
 
-
-    file_ext = os.path.splitext(file.filename)[1]
-    if file_ext.lower() not in ALLOWED_IMAGE_EXTENSIONS:
-        raise HTTPException(
-            status_code=400,
-            detail="Unsupported file format. Allowed formats are: jpg, jpeg, png, gif",
-        )
+    await validete_image_formate(file) # check validate image - helper function 
 
     Image_path = await insert_image(file, IMAGEDIR, BASE_URL) # helper.inser_image function use 
 

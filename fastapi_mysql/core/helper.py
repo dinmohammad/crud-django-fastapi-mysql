@@ -20,8 +20,11 @@ async def insert_image(file, IMAGEDIR, BASE_URL):
     return formate_file_name
 
 async def validete_image_formate(file):
-    supported_formats = ["jpeg", "jpg", "png"]
-    image_format = imghdr.what(None, h=file.file.read())
-    if image_format not in supported_formats:
-        raise HTTPException(status_code=400, detail="Invalid image format. Supported formats are JPEG and PNG.")
+    ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif'}
+    file_ext = os.path.splitext(file.filename)[1]
+    if file_ext.lower() not in ALLOWED_IMAGE_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail="Unsupported file format. Allowed formats are: jpg, jpeg, png, gif",
+        )
         
