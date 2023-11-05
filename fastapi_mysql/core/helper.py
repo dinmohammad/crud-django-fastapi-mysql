@@ -19,6 +19,15 @@ async def insert_image(file, IMAGEDIR, BASE_URL):
     formate_file_name = BASE_URL + IMAGEDIR + f'{formatted_date}' + file.filename 
     return formate_file_name
 
+
+async def image_remove_dir(IMAGEDIR, oldPath):
+    image_url = oldPath
+    filename = os.path.basename(image_url)
+    image_path = os.path.join(IMAGEDIR, filename)
+
+    if os.path.exists(image_path):
+        os.remove(image_path)
+
 async def validete_image_formate(file):
     ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif'}
     file_ext = os.path.splitext(file.filename)[1]

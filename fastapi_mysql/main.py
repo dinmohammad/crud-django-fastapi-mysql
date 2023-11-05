@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Annotated, Optional
-from core.helper import insert_image, validete_image_formate
+from core.helper import insert_image, image_remove_dir, validete_image_formate
 import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
@@ -80,6 +80,7 @@ async def create_post(
 
     await validete_image_formate(file) # check validate image - helper function 
 
+    # Insert the image with the new one
     Image_path = await insert_image(file, IMAGEDIR, BASE_URL) # helper.inser_image function use 
 
     db_post = models.student(
@@ -140,7 +141,11 @@ async def update_student(
     if details is not None:
         student_db.details = details
     if file is not None:
-        Image_path = await insert_image(file, IMAGEDIR, BASE_URL) # user helper.insert_image functon
+        # Remove the old image from the directory
+        await image_remove_dir(IMAGEDIR, student_db.imageUrl)      
+
+        # Update the image with the new one
+        Image_path = await insert_image(file, IMAGEDIR, BASE_URL)  # Use helper.insert_image function
         student_db.imageUrl = Image_path
     if user_id is not None:
         student_db.user_id = user_id
@@ -157,14 +162,9 @@ async def delete_post_by_id(post_id: int, db: db_dependency):
     
     if data is None:
         raise HTTPException(status_code=404, detail='No posts found')
-    
-    image_url = data.imageUrl
-    filename = os.path.basename(image_url)
-    image_path = os.path.join(IMAGEDIR, filename)
 
-    # Delete the image file from the server if it exists
-    if os.path.exists(image_path):
-        os.remove(image_path)
+    # Remove the old image from the directory
+    await image_remove_dir(IMAGEDIR, data.imageUrl)   # user helper 
 
     db.delete(data)
     db.commit()
