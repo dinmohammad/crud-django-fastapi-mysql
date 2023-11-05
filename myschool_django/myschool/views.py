@@ -4,6 +4,8 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 import requests
+from django.contrib import messages
+
 
 from myschool import settings
 
@@ -60,6 +62,9 @@ def createStudent(request):
         response = requests.post(api_url, data=data, files=files)
 
         if response.status_code == 201:
+            alert_message = "Student record created successfully."
+            alert_type = "success"
+            messages.success(request, alert_message, alert_type)
             return redirect('/')
         else:
             print("Failed status code:", response.status_code)
