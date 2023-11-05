@@ -19,6 +19,7 @@ models.Base.metadata.create_all(bind=engine)
 
 BASE_URL = 'http://127.0.0.1:8000/' # port 8000
 IMAGEDIR = "uploads/"
+ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif'}
 
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
@@ -77,10 +78,13 @@ async def create_post(
     file: UploadFile = File(...),
     user_id: int = Form(...)):
 
-    # await validete_image_formate(file)
-    # image_format = imghdr.what(None, h=file.file.read())
-    # if image_format not in ["jpeg", "jpg", "png"]:
-    #     raise HTTPException(status_code=400, detail="Invalid image format. Supported formats are JPEG and PNG.")
+
+    file_ext = os.path.splitext(file.filename)[1]
+    if file_ext.lower() not in ALLOWED_IMAGE_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail="Unsupported file format. Allowed formats are: jpg, jpeg, png, gif",
+        )
 
     Image_path = await insert_image(file, IMAGEDIR, BASE_URL) # helper.inser_image function use 
 
