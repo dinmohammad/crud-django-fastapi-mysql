@@ -109,7 +109,8 @@ async def create_post(std_id: int, db: db_dependency):
 async def get_all_posts(db: db_dependency):
     post_data = db.query(models.student).all()
     if not post_data:
-        raise HTTPException(status_code=404, detail='No posts found')
+        post_data = None
+        # raise HTTPException(status_code=404, detail='No posts found')
     return post_data
 
 

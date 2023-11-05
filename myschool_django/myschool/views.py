@@ -13,6 +13,9 @@ base_url = settings.BASE_URL
 def homePage(request, image_bytes=None):
     api_url = f'{settings.BASE_URL}/all_student/'
     response = requests.get(api_url).json()
+    print(response)
+    if response is None:
+        response = None
     return render(request, 'pages/homepage.html', {'response': response})
 
 
